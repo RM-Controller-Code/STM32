@@ -2,7 +2,7 @@
 
 STM32_Demo目录结构
 
-<<<<<<< HEAD
+
 ​		3508_motor 3508电机控制Demo
 
 ​		BMI088 BMI088读取加速计、陀螺仪、温度数据Demo
