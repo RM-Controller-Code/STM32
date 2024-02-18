@@ -1,4 +1,4 @@
-#¥ÀŒƒº˛¥”ƒ£∞Â◊‘∂Ø…˙≥…! «ÎŒ∏¸∏ƒ!
+#Ê≠§Êñá‰ª∂‰ªéÊ®°ÊùøËá™Âä®ÁîüÊàê! ËØ∑ÂãøÊõ¥Êîπ!
 set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_VERSION 1)
 cmake_minimum_required(VERSION 3.19)
@@ -14,7 +14,7 @@ set(SIZE arm-none-eabi-size)
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
 # project settings
-project(STM32_Demo C CXX ASM)
+project(STM32_freeRTOS C CXX ASM)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_C_STANDARD 11)
 
@@ -46,7 +46,8 @@ else ()
     add_compile_options(-Og -g)
 endif ()
 
-include_directories(Core/Inc
+include_directories(
+        Core/Inc
         Drivers/STM32F4xx_HAL_Driver/Inc
         Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
         Drivers/CMSIS/Device/ST/STM32F4xx/Include
@@ -54,41 +55,25 @@ include_directories(Core/Inc
         Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS
         Middlewares/Third_Party/FreeRTOS/Source/include
         Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F
-        IST8310_I2C
-        BMI088
-        Mahony
-        )
-###################################################
-#“˝»ÎÕ∑Œƒº˛
-include_directories(Breathe_light)
-include_directories(Buzzer)
-include_directories(Steer_Engine)
-include_directories(Interrupt_trigger)
-include_directories(Serial_port)
-include_directories(Direct_Memory_Access)
-include_directories(Flash)
-include_directories(3508_motor)
-include_directories(PID)
-include_directories(SPI_DMA)
-include_directories(IMU_Slove)
-include_directories(Board_Communication)
-#“˝»Î‘¥Œƒº˛
-set(Breathe_light Breathe_light/Breathe_Light.c)
-set(Buzzer Buzzer/Buzzer.c)
-set(Steer_Engine Steer_Engine/Steer_Engine.c)
-set(Interrupt_trigger Interrupt_trigger/Interrupt_trigger.c)
-set(Serial_port Serial_port/Serial_port.c)
-set(Direct_Memory_Access Direct_Memory_Access/Direct_Memory_Access.c Direct_Memory_Access/remote_control.c)
-set(Flash Flash/Flash.c )
-set(3508_motor 3508_motor/Motor_CAN.c)
-set(PID PID/PID.c)
-set(SPI_DMA SPI_DMA/SPI_DMA.c)
-set(IMU_Slove IMU_Slove/IMU_Slove.c)
-set(Board_Communication Board_Communication/Board_communication.c)
-###################################################
+        Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc
+        Middlewares/ST/STM32_USB_Device_Library/Core/Inc
+        USB_DEVICE/App
+        USB_DEVICE/Target
+)
+#*****************************************************
+#ËÆæÁΩÆÂ§¥Êñá‰ª∂
+include_directories(USB_Task)
+include_directories(Comunication)
+#ËÆæÁΩÆÊ∫êÊñá‰ª∂
+set(USB_Task USB_Task/USB_Task.c)
+set(Packet Comunication/Packet.c)
+set(Decode Comunication/Decode.c)
+set(Fifo Comunication/Fifo.c)
+set(CRC8_CRC16 Comunication/CRC8_CRC16.c)
+#*****************************************************
 add_definitions(-DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx)
 
-file(GLOB_RECURSE SOURCES "Core/*.*" "Drivers/*.*" "Middlewares/*.*" "IST8310_I2C/*.*" "BMI088/*.*" "Mahony/*.*")
+file(GLOB_RECURSE SOURCES "Core/*.*" "Drivers/*.*" "Middlewares/*.*" "USB_DEVICE/*.*")
 
 set(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/STM32F407IGHX_FLASH.ld)
 
@@ -97,18 +82,11 @@ add_link_options(-mcpu=cortex-m4 -mthumb -mthumb-interwork)
 add_link_options(-T ${LINKER_SCRIPT})
 
 add_executable(${PROJECT_NAME}.elf ${SOURCES} ${LINKER_SCRIPT}
-           ${Breathe_light}
-           ${Buzzer}
-           ${Steer_Engine}
-           ${Interrupt_trigger}
-           ${Serial_port}
-           ${Direct_Memory_Access}
-           ${Flash}
-           ${3508_motor}
-           ${PID}
-           ${SPI_DMA}
-           ${IMU_Slove}
-           ${Board_Communication}
+        ${USB_Task}
+        ${Packet}
+        ${Decode}
+        ${Fifo}
+        ${CRC8_CRC16}
 )
 
 set(HEX_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.hex)

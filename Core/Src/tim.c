@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -72,7 +72,7 @@ void MX_TIM1_Init(void)
     Error_Handler();
   }
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 2000;
+  sConfigOC.Pulse = 5000;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
@@ -82,6 +82,7 @@ void MX_TIM1_Init(void)
   {
     Error_Handler();
   }
+  sConfigOC.Pulse = 2000;
   if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
   {
     Error_Handler();
@@ -308,7 +309,7 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* tim_baseHandle)
     __HAL_RCC_TIM1_CLK_ENABLE();
 
     /* TIM1 interrupt Init */
-    HAL_NVIC_SetPriority(TIM1_UP_TIM10_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(TIM1_UP_TIM10_IRQn, 5, 0);
     HAL_NVIC_EnableIRQ(TIM1_UP_TIM10_IRQn);
   /* USER CODE BEGIN TIM1_MspInit 1 */
 

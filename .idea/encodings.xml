@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/Core/Src/freertos.c" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/STM32_freeRTOS.ioc" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/USB_Task/USB_Task.c" charset="UTF-8" />
+  </component>
+</project>
